@@ -1,43 +1,53 @@
-import { useState, useEffect } from 'react'
+import React from "react"
+import Header from "./components/header"
+import logo from "./img/react.svg"
+import Test from './components/test'
 
-function App() {
-  const [data, setData] = useState([])
 
   
-
-  useEffect(() => {
-    async function fetchData() {
-      console.log(import.meta.env.VITE_API_URL)
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}posts/`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const result = await response.json();
-        console.log(result)
-        setData(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
+  class App extends React.Component {
+    constructor(props) {
+      super(props)
+      this.state = {
+        help: 'help', 
+        place_text: 'write here',
+        user_input: '',
       }
-      
+
+      this.Click = this.Click.bind(this)
+      this.Mouse_enter = this.Mouse_enter.bind(this)
+      this.Mouse_leave = this.Mouse_leave.bind(this)
     }
-    fetchData();
-  }, [])
 
-  return (
-    <>
-    <div class='posts'>
-    {data.map((post, index) => (
-      <h3 key={index}>{post.title}</h3>
-    ))}
+      render() {
+        return (
+          <div>
+            <Header title="hello" />
+            {/* <img src={logo} className="image" /> */}
+            <h1>{this.state.user_input === '' ? 'this is void': this.state.user_input}</h1>
+            {/* <button onClick={this.Click}>click</button> */}
+            <input type="text" 
+            onMouseEnter={this.Mouse_enter} 
+            onMouseLeave={this.Mouse_leave} 
+            placeholder={this.state.place_text}
+            onChange={event => this.setState({user_input: event.target.value})}/>
+            <Test/>
+          </div>
+      )
+    }
+  
+    Click() {
+      this.setState({help: 'hello'})
+      // console.log('click')
+    }
+    Mouse_enter() {
+      this.setState({place_text: 'yes here!'})
+    }
 
-    {data.map((post, index) => (
-      <p key={index}>{post.body}</p>
-    ))}
-    </div>
-      
-    </>
-  )
-}
+    Mouse_leave() {
+      this.setState({place_text: 'write here'})
+    }
+  }
+  
 
 export default App
